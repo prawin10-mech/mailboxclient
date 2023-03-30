@@ -7,11 +7,13 @@ import axios from "axios";
 const baseUrl = "http://localhost:3000";
 
 const SignUp = () => {
+  const [otpSend, setOtpSend] = useState(false);
   const navigate = useNavigate();
   const [values, setValues] = useState({
     email: "",
     password: "",
     confirmPassword: "",
+    otp: "",
   });
 
   const toastOptions = {
@@ -29,15 +31,24 @@ const SignUp = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const userLoginHandler = async (e) => {
-    e.preventDefault();
+  const verifyOtp = async () => {
+    const { email, otp } = values;
+    const response = await axios.post(baseUrl + "/verify_otp", { email, otp });
+    if (response.data.status === false) {
+      toast.error(response.data.msg, toastOptions);
+    } else {
+      navigate("/");
+    }
+  };
 
+  const userSignUpHandler = async (e) => {
+    e.preventDefault();
     if (handleValidate()) {
       const response = await axios.post(baseUrl + "/user_signup", values);
       if (response.data.status === false) {
         toast.error(response.data.msg, toastOptions);
       } else {
-        navigate("/");
+        setOtpSend(true);
       }
     }
   };
@@ -74,7 +85,7 @@ const SignUp = () => {
     <>
       <Container className="w-25 h-100 bg-light m-auto mt-5">
         <h1 className="text-center">Sign Up</h1>
-        <Form onSubmit={userLoginHandler}>
+        <Form onSubmit={userSignUpHandler}>
           <Form.Group controlId="email">
             <Form.Label>Email: </Form.Label>
             <Form.Control
@@ -102,13 +113,36 @@ const SignUp = () => {
               onChange={(e) => handleChange(e)}
             />
           </Form.Group>
+          {otpSend && (
+            <Form.Group controlId="otp">
+              <Form.Label>Confirm Password: </Form.Label>
+              <Form.Control
+                type="text"
+                name="otp"
+                placeholder="Enter OTP"
+                onChange={(e) => handleChange(e)}
+              />
+            </Form.Group>
+          )}
           {/* <div className="text-decoration-none mt-2 text-center">
             <Link to="/forgotPassword">Forgot Password</Link>
           </div> */}
           <div className="d-flex justify-content-center">
-            <Button variant="primary" type="submit" className="mt-3">
-              Sign Up
-            </Button>
+            {!otpSend && (
+              <Button variant="primary" type="submit" className="mt-3">
+                Sign Up
+              </Button>
+            )}
+            {otpSend && (
+              <Button
+                variant="primary"
+                type="button"
+                onClick={verifyOtp}
+                className="mt-3"
+              >
+                Verify
+              </Button>
+            )}
           </div>
 
           {/* <p>
