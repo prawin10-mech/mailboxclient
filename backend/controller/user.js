@@ -1,3 +1,4 @@
+const generateJwt = require("../services/generateJWT");
 const User = require("../models/user");
 const generateHash = require("../services/generateHashedPassword");
 const sendOtp = require("../services/sendOtp");
@@ -67,7 +68,8 @@ exports.postLoginUser = async (req, res) => {
     if (!checkPassword) {
       return res.json({ status: false, msg: "Incorrect email or password" });
     } else {
-      return res.json({ status: true, user });
+      const token = await generateJwt(email);
+      return res.json({ status: true, token });
     }
   } catch (err) {
     console.log(err);

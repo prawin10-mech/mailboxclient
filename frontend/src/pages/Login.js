@@ -36,6 +36,7 @@ const Login = () => {
     if (!data.status) {
       toast.error(data.msg, toastOptions);
     } else {
+      localStorage.setItem("token", data.token);
       navigate("/home");
     }
   };
