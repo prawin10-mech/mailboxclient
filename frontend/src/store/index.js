@@ -1,6 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import composeMail from "./composeMail";
+import composeMailReducer from "./composeMail";
+import mailReducer from "./mail";
 
-const store = configureStore({ reducer: { composeMail } });
+const store = configureStore({
+  reducer: { composeMail: composeMailReducer, mail: mailReducer },
+});
 
 export default store;

@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import useToken from "../utils/useToken";
 
 import { useDispatch } from "react-redux";
-import { composeMailActions } from "../store/composeMail";
+import { mailActions } from "../store/mail";
 
 const MyEditor = () => {
   const dispatch = useDispatch();
@@ -33,7 +33,9 @@ const MyEditor = () => {
     const token = useToken();
     console.log(values);
     if (handleValidate()) {
-      const obj = { ...values, message: value };
+      let msg = value.replaceAll("<p>", "");
+      msg = msg.replaceAll("</p>", "");
+      const obj = { ...values, message: msg };
       console.log(obj);
       const { data } = await axios.post(
         "http://localhost:3000/send_mail",
@@ -42,6 +44,12 @@ const MyEditor = () => {
           headers: { Authorization: token },
         }
       );
+      if (data.status) {
+        const { data } = await axios.get("http://localhost:3000/getAllMails", {
+          headers: { Authorization: token },
+        });
+        dispatch(mailActions.getAllMails({ mails: data.mails }));
+      }
       console.log(data);
     }
   };
@@ -84,8 +92,8 @@ const MyEditor = () => {
   };
 
   return (
-    <div>
-      <Container className="w-50">
+    <div className="">
+      <Container className="">
         <Form onSubmit={SendEmailHandler}>
           <div>
             <Form.Group controlId="to">

@@ -7,6 +7,7 @@ exports.sendMail = async (req, res) => {
 
     const mail = new Mail({
       userId: req.user._id,
+      from: req.user.email,
       to,
       cc,
       bcc,
@@ -20,7 +21,20 @@ exports.sendMail = async (req, res) => {
         .json({ status: true, msg: "mail send successfully" });
     });
   } catch (err) {
-    console.log("failed");
+    console.log(err);
+  }
+};
+
+exports.getAllMails = async (req, res) => {
+  try {
+    const to = req.user.email;
+    const mails = await Mail.find({ to: "prawin10@outlook.com" });
+    if (!mails) {
+      return res.json({ status: false, msg: "No Mails Present" });
+    } else {
+      return res.json({ status: true, mails });
+    }
+  } catch (err) {
     console.log(err);
   }
 };
