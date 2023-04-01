@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Form, Container } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -43,7 +43,7 @@ const Login = () => {
   return (
     <>
       <Container className="w-25 h-100 bg-light m-auto mt-5">
-        <h1 className="text-center">Sign Up</h1>
+        <h1 className="text-center">Login</h1>
         <Form onSubmit={userLoginHandler}>
           <Form.Group controlId="email">
             <Form.Label>Email: </Form.Label>
@@ -77,7 +77,11 @@ const Login = () => {
             Don't have an account ? <Link to="/register">Sign In</Link>
           </p> */}
         </Form>
+        <p>
+          Don't have an account ? <Link to="/signUp">Sign In</Link>
+        </p>
       </Container>
+
       <ToastContainer />
     </>
   );

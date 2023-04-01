@@ -36,9 +36,7 @@ const Home = () => {
     const { data } = await axios.get("http://localhost:3000/getSendMails", {
       headers: { Authorization: token },
     });
-
     dispatch(mailActions.getSendedMails({ mails: data.mails }));
-    console.log(data);
   };
 
   const getAllMails = async () => {

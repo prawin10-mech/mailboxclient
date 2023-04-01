@@ -149,6 +149,9 @@ const SignUp = () => {
             Don't have an account ? <Link to="/register">Sign In</Link>
           </p> */}
         </Form>
+        <p>
+          Already have an account ? <Link to="/">Login</Link>
+        </p>
       </Container>
       <ToastContainer />
     </>
