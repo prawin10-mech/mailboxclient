@@ -9,6 +9,7 @@ const mailSchema = new Schema({
   bcc: String,
   subject: { type: String },
   message: { type: String, required: true },
+  isRead: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Mail", mailSchema);

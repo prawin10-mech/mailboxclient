@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { mails: [] };
+const initialState = { mails: [], totalUnreadMails: 0 };
 
 const mailSlice = createSlice({
   name: "mail",
@@ -12,6 +12,9 @@ const mailSlice = createSlice({
     getAllMails(state, action) {
       state.mails = [...action.payload.mails];
       console.log(state.mails);
+    },
+    getUnreadMailsCount(state, action) {
+      state.totalUnreadMails = action.payload.count;
     },
   },
 });

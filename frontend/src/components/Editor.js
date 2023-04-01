@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
@@ -19,6 +19,18 @@ const MyEditor = () => {
   });
   const [value, setValue] = useState("");
   const [cc, setCc] = useState(false);
+  const formRef = useRef(null);
+
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  };
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -45,6 +57,18 @@ const MyEditor = () => {
         }
       );
       if (data.status) {
+        const { data } = await axios.get(
+          "http://localhost:3000/getUnreadMailsCount",
+          { headers: { Authorization: token } }
+        );
+        dispatch(mailActions.getUnreadMailsCount({ count: data.count }));
+      }
+
+      if (data.status) {
+        setValues({ to: "", cc: "", bcc: "", subject: "" });
+        formRef.current.reset();
+        toast.success("Mail send Successfully", toastOptions);
+
         const { data } = await axios.get("http://localhost:3000/getAllMails", {
           headers: { Authorization: token },
         });
@@ -52,17 +76,6 @@ const MyEditor = () => {
       }
       console.log(data);
     }
-  };
-
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "dark",
   };
 
   const handleValidate = () => {
@@ -92,9 +105,9 @@ const MyEditor = () => {
   };
 
   return (
-    <div className="">
+    <div className="position-fixed right-0 bottom-0">
       <Container className="">
-        <Form onSubmit={SendEmailHandler}>
+        <Form onSubmit={SendEmailHandler} ref={formRef}>
           <div>
             <Form.Group controlId="to">
               <Form.Label>To: </Form.Label>
