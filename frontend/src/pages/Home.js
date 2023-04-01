@@ -10,9 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Inbox from "../components/Inbox";
 import { mailActions } from "../store/mail";
 
+import Send from "../pages/Send";
+
 const Home = () => {
   const compose = useSelector((state) => state.composeMail.isOpened);
   const [inbox, setInbox] = useState(false);
+  const [send, setSend] = useState(false);
   const mails = useSelector((state) => state.mail.mails);
   const count = useSelector((state) => state.mail.totalUnreadMails);
   const token = useToken();
@@ -23,6 +26,19 @@ const Home = () => {
 
   const activateInbox = () => {
     setInbox(true);
+    setSend(false);
+  };
+
+  const activateSend = async () => {
+    setInbox(false);
+    setSend(true);
+
+    const { data } = await axios.get("http://localhost:3000/getSendMails", {
+      headers: { Authorization: token },
+    });
+
+    dispatch(mailActions.getSendedMails({ mails: data.mails }));
+    console.log(data);
   };
 
   const getAllMails = async () => {
@@ -59,8 +75,13 @@ const Home = () => {
           <Button className="mt-2" onClick={activateInbox}>
             Inbox <span>{count}</span>
           </Button>
+          <br />
+          <Button className="mt-2" onClick={activateSend}>
+            Send
+          </Button>
         </div>
         {inbox && <Inbox />}
+        {send && <Send />}
       </div>
       {compose && <Editor />}
     </div>

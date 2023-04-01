@@ -1,8 +1,10 @@
 .container {
+  border: 1px solid green;
 }
 
 .mailDetails {
   border: 1px solid blue;
+  margin-top: 50px;
   padding: 5px;
   border-radius: 5px;
 }

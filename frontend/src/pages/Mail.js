@@ -16,7 +16,7 @@ const Mail = () => {
       { headers: { Authorization: token } }
     );
     let show = (
-      <div key={data.mail._id} className="container w-50 m-auto">
+      <div key={data.mail._id} className="container  m-auto">
         <div className="mailDetails">
           <p>From: {data.mail.from}</p>
           <p>CC: {data.mail.cc}</p>

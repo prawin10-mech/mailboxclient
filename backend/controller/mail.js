@@ -95,3 +95,13 @@ exports.postReadMail = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.getSendMails = async (req, res) => {
+  try {
+    const { email } = req.user;
+    const mails = await Mail.find({ from: email });
+    return res.json({ status: true, mails });
+  } catch (err) {
+    console.log(err);
+  }
+};

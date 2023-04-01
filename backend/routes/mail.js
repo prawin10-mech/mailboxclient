@@ -19,4 +19,6 @@ router.post("/getMail", middleware.auth, mailController.getMailDetails);
 
 router.post("/mail/readed", middleware.auth, mailController.postReadMail);
 
+router.get("/getSendMails", middleware.auth, mailController.getSendMails);
+
 module.exports = router;
